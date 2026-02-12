@@ -307,13 +307,13 @@ macro(rosidl_generate_interfaces target)
       file(TO_CMAKE_PATH "${_idl_relpath}" _idl_relpath)
       list(APPEND _rosidl_cmake_IDL_FILES "${_idl_relpath}")
     endforeach()
-    # install interface files to subfolders based on their extension
+    # install interface files to same folder as idl based on their extension
     foreach(_idl_file ${_non_idl_files})
-      get_filename_component(_parent_folder "${_idl_file}" DIRECTORY)
-      get_filename_component(_parent_folder "${_parent_folder}" NAME)
+      get_filename_component(_extension "${_idl_file}" LAST_EXT)
+      string(REGEX REPLACE "^\\." "" _target_folder "${_extension}")
       install(
         FILES ${_idl_file}
-        DESTINATION "share/${PROJECT_NAME}/${_parent_folder}"
+        DESTINATION "share/${PROJECT_NAME}/${_target_folder}"
       )
       get_filename_component(_name "${_idl_file}" NAME)
       list(APPEND _rosidl_cmake_INTERFACE_FILES "${_parent_folder}/${_name}")
